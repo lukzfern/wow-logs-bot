@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChannelType, PermissionFlagsBits, MessageFlags, type ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, ChannelType, PermissionFlagsBits, InteractionContextType, MessageFlags, type ChatInputCommandInteraction } from 'discord.js';
 import { api } from '../api.js';
 import { setGuildConfig, type GuildConfig } from '../store.js';
 
@@ -9,7 +9,7 @@ export const definition = new SlashCommandBuilder()
   .addStringOption(o => o.setName('guild').setDescription('Guild name en wow-logs (ej: Serenity)').setRequired(true))
   .addChannelOption(o => o.setName('channel').setDescription('Canal o thread donde postear logs').addChannelTypes(ChannelType.GuildText, ChannelType.PublicThread, ChannelType.PrivateThread).setRequired(true))
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-  .setDMPermission(false);
+  .setContexts(InteractionContextType.Guild);
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const realm = interaction.options.getString('realm', true);
