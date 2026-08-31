@@ -1,4 +1,4 @@
-import { Client, ChannelType, TextChannel, ThreadAutoArchiveDuration, DiscordAPIError } from 'discord.js';
+import { Client, ChannelType, TextChannel, ThreadChannel, ThreadAutoArchiveDuration, DiscordAPIError } from 'discord.js';
 import { api } from './api.js';
 import type { WLLogDetail } from './types.js';
 import { DEDUP_WINDOW_MS } from './types.js';
@@ -56,11 +56,16 @@ async function checkGuild(client: Client, discordGuildId: string, cfg: GuildConf
   if (!newLogs.length) return;
 
   const channel = await client.channels.fetch(cfg.channelId).catch(() => null);
-  if (!channel || channel.type !== ChannelType.GuildText) {
-    console.error(`[watcher] Channel ${cfg.channelId} not found or not a text channel`);
+  if (!channel) {
+    console.error(`[watcher] Channel ${cfg.channelId} not found`);
     return;
   }
-  const textChannel = channel as TextChannel;
+
+  const isThread = channel.type === ChannelType.PublicThread || channel.type === ChannelType.PrivateThread;
+  if (!isThread && channel.type !== ChannelType.GuildText) {
+    console.error(`[watcher] Channel ${cfg.channelId} is not a text channel or thread`);
+    return;
+  }
 
   // Fetch all new log details first to enable grouping
   const fetched: { logId: number; log: WLLogDetail; guildName: string }[] = [];
@@ -85,7 +90,7 @@ async function checkGuild(client: Client, discordGuildId: string, cfg: GuildConf
     const existingRaid = findMatchingRaid(discordGuildId, sig.raidName, sig.size, sig.firstFightStart);
     if (existingRaid) {
       // This is a duplicate of an already-posted raid
-      await postAltLog(textChannel, existingRaid, item, discordGuildId, cfg);
+      await postAltLog(channel as TextChannel, existingRaid, item, discordGuildId, cfg);
       processed.add(item.logId);
       updateLastLogId(discordGuildId, item.logId);
       continue;
@@ -120,15 +125,17 @@ async function checkGuild(client: Client, discordGuildId: string, cfg: GuildConf
 
       let threadId: string | undefined;
 
-      if (cfg.useThreads) {
-        const thread = await textChannel.threads.create({
+      if (isThread) {
+        await (channel as ThreadChannel).send({ embeds: [embed] });
+      } else if (cfg.useThreads) {
+        const thread = await (channel as TextChannel).threads.create({
           name: title.slice(0, 100),
           autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
         });
         threadId = thread.id;
         await thread.send({ embeds: [embed] });
       } else {
-        await textChannel.send({ embeds: [embed] });
+        await (channel as TextChannel).send({ embeds: [embed] });
       }
 
       addPostedRaid(discordGuildId, {

@@ -7,8 +7,7 @@ export const definition = new SlashCommandBuilder()
   .setDescription('Configurar guild y canal para logs automáticos')
   .addStringOption(o => o.setName('realm').setDescription('Realm slug (ej: wow-patagonia)').setRequired(true))
   .addStringOption(o => o.setName('guild').setDescription('Guild name en wow-logs (ej: Serenity)').setRequired(true))
-  .addChannelOption(o => o.setName('channel').setDescription('Canal donde postear logs').addChannelTypes(ChannelType.GuildText).setRequired(true))
-  .addBooleanOption(o => o.setName('threads').setDescription('Crear thread por log (default: sí)'))
+  .addChannelOption(o => o.setName('channel').setDescription('Canal o thread donde postear logs').addChannelTypes(ChannelType.GuildText, ChannelType.PublicThread, ChannelType.PrivateThread).setRequired(true))
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
   .setDMPermission(false);
 
@@ -16,7 +15,6 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const realm = interaction.options.getString('realm', true);
   const guild = interaction.options.getString('guild', true);
   const channel = interaction.options.getChannel('channel', true);
-  const useThreads = interaction.options.getBoolean('threads') ?? true;
 
   await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
@@ -27,14 +25,16 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
 
-  const cfg: GuildConfig = { realm, guild, channelId: channel.id, lastLogId: null, useThreads };
+  const isThread = channel.type === ChannelType.PublicThread || channel.type === ChannelType.PrivateThread;
+  const cfg: GuildConfig = { realm, guild, channelId: channel.id, lastLogId: null, useThreads: !isThread };
   setGuildConfig(interaction.guildId!, cfg);
 
+  const mode = isThread ? 'Mensajes en thread existente' : 'Thread nuevo por log';
   await interaction.editReply(
     `✅ Configurado!\n` +
     `**Guild:** ${guild} @ ${realm}\n` +
     `**Canal:** <#${channel.id}>\n` +
-    `**Threads:** ${useThreads ? 'Sí' : 'No'}\n\n` +
+    `**Modo:** ${mode}\n\n` +
     `Los nuevos logs se publicarán automáticamente.`,
   );
 }
