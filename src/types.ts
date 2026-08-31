@@ -8,6 +8,7 @@ export interface WLConsumables {
   potionsUsed: number;
   healthstonesUsed: number;
   flaskActive: boolean;
+  elixirActive: boolean;
   flaskUptime: number | null;
   foodBuff: boolean;
   hadPrepot: boolean;
