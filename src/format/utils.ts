@@ -24,6 +24,16 @@ export function spanishDateTime(iso: string): string {
   return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)} ${get('day')}/${get('month')}/${get('year')}, ${get('hour')}:${get('minute')}hs`;
 }
 
+export function spanishDate(iso: string): string {
+  const d = new Date(iso);
+  const parts = new Intl.DateTimeFormat('es-AR', {
+    timeZone: 'UTC', weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric',
+  }).formatToParts(d);
+  const get = (t: Intl.DateTimeFormatPartTypes) => parts.find(p => p.type === t)?.value ?? '';
+  const weekday = get('weekday');
+  return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)} ${get('day')}/${get('month')}/${get('year')}`;
+}
+
 export function fmtDuration(sec: number): string {
   const h = Math.floor(sec / 3600);
   const m = Math.floor((sec % 3600) / 60);
