@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChannelType, ThreadAutoArchiveDuration, MessageFlags, PermissionFlagsBits, type ChatInputCommandInteraction, type TextChannel } from 'discord.js';
+import { SlashCommandBuilder, ChannelType, ThreadAutoArchiveDuration, MessageFlags, PermissionFlagsBits, InteractionContextType, type ChatInputCommandInteraction, type TextChannel } from 'discord.js';
 import { api } from '../api.js';
 import { friendlyError } from '../errors.js';
 import { resolveEmojis } from '../emoji.js';
@@ -12,7 +12,7 @@ export const definition = new SlashCommandBuilder()
   .addBooleanOption(o => o.setName('thread').setDescription('Crear thread como haría el auto-post (default: no)'))
   .addStringOption(o => o.setName('alts').setDescription('IDs de logs alternativos separados por coma (ej: 29991,29990)'))
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-  .setDMPermission(false);
+  .setContexts(InteractionContextType.Guild);
 
 function parseLogId(input: string): number | null {
   const match = input.match(/(\d+)\s*$/);

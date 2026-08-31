@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, MessageFlags, PermissionFlagsBits, type ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, MessageFlags, PermissionFlagsBits, InteractionContextType, type ChatInputCommandInteraction } from 'discord.js';
 import { api } from '../api.js';
 import { friendlyError } from '../errors.js';
 import { resolveEmojis } from '../emoji.js';
@@ -9,7 +9,7 @@ export const definition = new SlashCommandBuilder()
   .setName('latestlog')
   .setDescription('Mostrar el último log de la guild')
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-  .setDMPermission(false);
+  .setContexts(InteractionContextType.Guild);
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const cfg = getGuildConfig(interaction.guildId!);

@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, PermissionFlagsBits, MessageFlags, type ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, InteractionContextType, MessageFlags, type ChatInputCommandInteraction } from 'discord.js';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -48,7 +48,7 @@ export const definition = new SlashCommandBuilder()
       { name: '📝 Solo texto — 0 emojis (no ocupa slots)', value: 'text' },
     ))
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuildExpressions)
-  .setDMPermission(false);
+  .setContexts(InteractionContextType.Guild);
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   if (!interaction.guild) {

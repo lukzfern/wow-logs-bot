@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, MessageFlags, PermissionFlagsBits, type ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, MessageFlags, PermissionFlagsBits, InteractionContextType, type ChatInputCommandInteraction } from 'discord.js';
 import { api } from '../api.js';
 import { friendlyError } from '../errors.js';
 import { getGuildConfig } from '../store.js';
@@ -7,7 +7,7 @@ export const definition = new SlashCommandBuilder()
   .setName('status')
   .setDescription('Estado del bot y la API')
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-  .setDMPermission(false);
+  .setContexts(InteractionContextType.Guild);
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   await interaction.deferReply({ flags: MessageFlags.Ephemeral });
