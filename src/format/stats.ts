@@ -111,15 +111,7 @@ export function groupEncounters(bossFights: WLFight[]): EncounterRow[] {
   return rows;
 }
 
-export function extractConsumables(killFights: WLFight[]): { total: number; flask: number; food: number; prepot: number } | null {
-  const fight = killFights.find(f => f.players.some(p => p.consumables));
-  if (!fight) return null;
-  const ps = fight.players.filter(p => p.consumables);
-  const total = ps.length;
-  const flask = ps.filter(p => p.consumables!.flaskActive).length;
-  const food = ps.filter(p => p.consumables!.foodBuff).length;
-  const prepot = ps.filter(p => p.consumables!.hadPrepot).length;
-  const potions = ps.reduce((s, p) => s + (p.consumables!.potionsUsed ?? 0), 0);
-  if (flask === 0 && food === 0 && prepot === 0 && potions === 0) return null;
-  return { total, flask, food, prepot };
+// Disabled until API accurately detects flask/food from active auras at pull time
+export function extractConsumables(_killFights: WLFight[]): { total: number; flask: number; food: number; prepot: number } | null {
+  return null;
 }
