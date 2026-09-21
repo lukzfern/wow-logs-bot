@@ -44,8 +44,9 @@ No code yet. Keep this **opt-in per Discord server** (same multi-guild rule as l
 | `class-roles` | botones de clase/spec | ManageRoles | no |
 | `channels` | plantilla de categorías raid | ManageChannels | no |
 | `moderation` | warn / timeout helpers | ModerateMembers | no |
+| `roster-role` | `/listarol` — assign a configured role from a pasted name list | ManageRoles | **GuildMembers** (enabled) |
 
-Invite bitfield today (`326417591296`) is logs-oriented: Send Messages, Embed Links, Attach Files, Read History, Use External Emojis, Add Reactions, Create Public Threads, Send Messages in Threads, Manage Threads. Role/channel/moderation modules need a new invite URL — document it in README when you add them.
+Invite bitfield (`326686026752`) includes Manage Roles plus the original logs perms. Server Members Intent must be on in the Developer Portal. The bot's role must sit above the target role.
 
 ## Official wow-logs overlap
 

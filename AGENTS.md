@@ -7,7 +7,7 @@ Read this file first. Then open the matching rule/skill. Do not invent API field
 ## Stack
 
 - Node 22+, TypeScript strict, ESM with `.js` import extensions
-- discord.js v14, `GatewayIntentBits.Guilds` only
+- discord.js v14, `Guilds` + `GuildMembers` (roster-role). Do not add more privileged intents without asking.
 - Persistence: `data/store.json` (gitignored). No database.
 - UI language: **Spanish (es-AR)**. Console logs: English with `[module]` prefix.
 
@@ -35,7 +35,7 @@ Deep product/API notes live in `.github/copilot-instructions.md`.
 
 New work goes in `src/modules/<id>/` and implements `IntegrationManifest` from `src/modules/contract.ts`. Register it in `src/modules/index.ts` — `src/index.ts` and `src/commands/index.ts` already compose that array. Do not dump org/admin state into `GuildConfig`.
 
-Shipped modules: `rankings` (`/rankings`). The original log watcher/commands still live in `src/watcher.ts` + `src/commands/`.
+Shipped modules: `rankings` (`/rankings`), `roster-role` (`/listarol`). The original log watcher/commands still live in `src/watcher.ts` + `src/commands/`.
 
 ## Non-negotiables
 
@@ -60,5 +60,7 @@ Shipped modules: `rankings` (`/rankings`). The original log watcher/commands sti
 npx tsc --noEmit
 npm run build
 ```
+
+Never tell the user a change is ready to run until **this session** has passed `npm run build`. A typecheck-only pass is not enough.
 
 For embed/API work: `npm test` (optional log id) and `/preview` in Discord. There is no browser UI to click.

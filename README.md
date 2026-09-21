@@ -10,6 +10,7 @@ Discord bot that auto-posts [wow-logs.co.in](https://wow-logs.co.in) raid logs i
 - **Duplicate detection** — multiple uploads from the same raid are grouped (best log shown, alts in footer)
 - **Spanish UI** — all user-facing text in Spanish
 - **Multi-guild** — one bot can serve multiple Discord servers, each with its own guild config
+- **Roster → rol** — `/listarol` asigna un rol configurable a un export de Raid-Helper (ej. consumibles del lunes)
 
 ## Quick Start
 
@@ -17,7 +18,8 @@ Discord bot that auto-posts [wow-logs.co.in](https://wow-logs.co.in) raid logs i
 
 1. Go to [discord.com/developers/applications](https://discord.com/developers/applications) → New Application
 2. Go to **Bot** → Reset Token → copy the token
-3. Go to **OAuth2** → copy the Client ID
+3. Bot → **Privileged Gateway Intents** → enable **Server Members Intent**
+4. Go to **OAuth2** → copy the Client ID
 
 ### 2. Get a WoW Logs API Key
 
@@ -27,7 +29,7 @@ Discord bot that auto-posts [wow-logs.co.in](https://wow-logs.co.in) raid logs i
 ### 3. Invite the Bot
 
 ```
-https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=326417591296&scope=bot+applications.commands
+https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=326686026752&scope=bot+applications.commands
 ```
 
 ### 4. Configure and Run
@@ -47,6 +49,7 @@ npm start
 ```
 /setup realm:wow-patagonia guild:Serenity channel:#raid-logs
 /setupemojis modo:Specs
+/listarol setup nombre:consumibles rol:@❖ 𝖈𝖔𝖓𝖘𝖚𝖒𝖆𝖇𝖑𝖊𝖘
 ```
 
 ## Commands
@@ -61,6 +64,7 @@ npm start
 | `/preview <log>` | Manage Server | Preview an embed (ephemeral, for testing) |
 | `/status` | Manage Server | Show API health and bot config |
 | `/rankings` | Manage Server | Guild Boss Points rankings (defaults to the realm's active raid/season) |
+| `/listarol` | Manage Roles | Assign a configured role from a Raid-Helper name list (`setup` / `preview` / `aplicar`) |
 
 ## Embed Sections
 
