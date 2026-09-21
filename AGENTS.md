@@ -1,6 +1,6 @@
-# WoW Logs Bot — Agent briefing
+# Serenity Bot — Agent briefing
 
-Discord bot for **Serenity @ Wow Patagonia** (WotLK 3.3.5). Today it auto-posts raid logs from [wow-logs.co.in](https://wow-logs.co.in) Public API v1. The target is a **guild ops bot**: logs plus raid organization and Discord administration.
+Discord bot for **Serenity @ Wow Patagonia** (WotLK 3.3.5). Posts raid logs from [wow-logs.co.in](https://wow-logs.co.in) Public API v1, plus guild-ops tools (roster roles, raid announcements). The target is a **guild ops bot**: logs plus raid organization and Discord administration.
 
 Read this file first. Then open the matching rule/skill. Do not invent API fields — call the API or read `bug-reports/`.
 

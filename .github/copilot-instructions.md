@@ -2,7 +2,7 @@
 applyTo: "**"
 ---
 
-# WoW Logs Discord Bot
+# Serenity Bot
 
 ## Project Overview
 Discord bot that auto-posts WoW raid logs from wow-logs.co.in into guild Discord channels.

@@ -1,6 +1,6 @@
-# WoW Logs Discord Bot
+# Serenity Bot
 
-Discord bot that auto-posts [wow-logs.co.in](https://wow-logs.co.in) raid logs into guild channels with rich embeds — built for WoW private server communities.
+Guild ops Discord bot for **Serenity @ Wow Patagonia**. Posts [wow-logs.co.in](https://wow-logs.co.in) raid logs, plus tools like roster roles and raid announcements.
 
 ## Features
 
@@ -10,7 +10,7 @@ Discord bot that auto-posts [wow-logs.co.in](https://wow-logs.co.in) raid logs i
 - **Duplicate detection** — multiple uploads from the same raid are grouped (best log shown, alts in footer)
 - **Spanish UI** — all user-facing text in Spanish
 - **Multi-guild** — one bot can serve multiple Discord servers, each with its own guild config
-- **Roster → rol** — `/listarol` asigna un rol configurable a un export de Raid-Helper (ej. consumibles del lunes)
+- **Roster → rol** — `/listarol` asigna un rol a un export de Raid-Helper y anuncia al raid (`anunciar` o el botón post-aplicar)
 
 ## Quick Start
 
@@ -50,6 +50,7 @@ npm start
 /setup realm:wow-patagonia guild:Serenity channel:#raid-logs
 /setupemojis modo:Specs
 /listarol setup nombre:consumibles rol:@❖ 𝖈𝖔𝖓𝖘𝖚𝖒𝖆𝖇𝖑𝖊𝖘
+/listarol anunciar preset:consumibles
 ```
 
 ## Commands
@@ -64,7 +65,7 @@ npm start
 | `/preview <log>` | Manage Server | Preview an embed (ephemeral, for testing) |
 | `/status` | Manage Server | Show API health and bot config |
 | `/rankings` | Manage Server | Guild Boss Points rankings (defaults to the realm's active raid/season) |
-| `/listarol` | Manage Roles | Assign a configured role from a Raid-Helper name list (`setup` / `preview` / `aplicar`) |
+| `/listarol` | Manage Roles | Assign a role from a Raid-Helper list and announce it (`setup` / `preview` / `aplicar` / `anunciar`) |
 
 ## Embed Sections
 

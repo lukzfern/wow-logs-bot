@@ -31,7 +31,7 @@ export async function applyPending(
     }
     await onProgress?.({ step, total, action: 'add', name: member.displayName });
     try {
-      await member.roles.add(role, 'WoW Logs Bot — /listarol');
+      await member.roles.add(role, 'Serenity Bot — /listarol');
       added++;
     } catch (err) {
       failed.push(`${member.displayName}: ${err instanceof Error ? err.message : 'error'}`);
@@ -44,7 +44,7 @@ export async function applyPending(
     if (!member) continue;
     await onProgress?.({ step, total, action: 'remove', name: member.displayName });
     try {
-      await member.roles.remove(role, 'WoW Logs Bot — /listarol');
+      await member.roles.remove(role, 'Serenity Bot — /listarol');
       removed++;
     } catch (err) {
       failed.push(`${member.displayName}: ${err instanceof Error ? err.message : 'error'}`);

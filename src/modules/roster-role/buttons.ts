@@ -1,11 +1,38 @@
-import { MessageFlags, type ButtonInteraction } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags, PermissionFlagsBits, type ButtonInteraction } from 'discord.js';
+import { DEFAULT_ANNOUNCE, mentionWarning, postAnnounce } from './announce.js';
 import { applyPending } from './apply.js';
 import { peekPending, takePending } from './pending.js';
+import { findPresetByRole } from './store.js';
 
 export async function handleRosterRoleButton(interaction: ButtonInteraction): Promise<boolean> {
   if (!interaction.customId.startsWith('rr:')) return false;
 
   const [, action, id] = interaction.customId.split(':');
+
+  if (action === 'say') {
+    if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageRoles)) {
+      await interaction.reply({ content: '❌ Solo officers pueden anunciar.', flags: MessageFlags.Ephemeral });
+      return true;
+    }
+    if (!interaction.guild || !interaction.channel || !interaction.channel.isTextBased() || interaction.channel.isDMBased()) {
+      await interaction.reply({ content: '❌ No pude publicar en este canal.', flags: MessageFlags.Ephemeral });
+      return true;
+    }
+    const role = interaction.guild.roles.cache.get(id);
+    if (!role) {
+      await interaction.reply({ content: '❌ El rol ya no existe.', flags: MessageFlags.Ephemeral });
+      return true;
+    }
+    const preset = findPresetByRole(interaction.guildId!, role.id);
+    const err = await postAnnounce(interaction.channel, interaction.guild, role, preset?.announce ?? DEFAULT_ANNOUNCE);
+    if (err) {
+      await interaction.reply({ content: err, flags: MessageFlags.Ephemeral });
+      return true;
+    }
+    const warn = mentionWarning(interaction.guild, role);
+    await interaction.reply({ content: warn ? `✅ Anuncio publicado.\n${warn}` : '✅ Anuncio publicado.', flags: MessageFlags.Ephemeral });
+    return true;
+  }
   const pending = peekPending(id);
   if (!pending) {
     await interaction.reply({ content: '❌ Esta confirmación expiró. Corré `/listarol aplicar` de nuevo.', flags: MessageFlags.Ephemeral });
@@ -49,7 +76,10 @@ export async function handleRosterRoleButton(interaction: ButtonInteraction): Pr
   if (result.failed.length) {
     msg += `\n⚠️ No se pudo aplicar a: ${result.failed.slice(0, 10).join(', ')}`;
   }
-  await interaction.editReply({ content: msg, embeds: [], components: [] });
+  const announceRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder().setCustomId(`rr:say:${pending.roleId}`).setLabel('Anunciar al raid').setStyle(ButtonStyle.Primary),
+  );
+  await interaction.editReply({ content: msg, embeds: [], components: [announceRow] });
   console.log(`[roster-role] ${interaction.guildId} +${result.added} -${result.removed} fail=${result.failed.length}`);
   return true;
 }

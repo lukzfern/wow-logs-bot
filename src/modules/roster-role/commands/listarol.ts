@@ -10,6 +10,7 @@ import {
   type ChatInputCommandInteraction,
   type Role,
 } from 'discord.js';
+import { DEFAULT_ANNOUNCE, mentionWarning, postAnnounce } from '../announce.js';
 import { buildPlanEmbed } from '../embed.js';
 import { savePending } from '../pending.js';
 import { buildRolePlan, roleManageError } from '../plan.js';
@@ -28,7 +29,13 @@ export const definition = new SlashCommandBuilder()
     .addStringOption(o => o.setName('modo').setDescription('Reemplazar saca el rol a quien no está en la lista').addChoices(
       { name: 'Reemplazar (recomendado)', value: 'replace' },
       { name: 'Solo agregar', value: 'add' },
-    )))
+    ))
+    .addStringOption(o => o.setName('anuncio').setDescription('Texto del anuncio. Usá {rol} para mencionar. Default: guild bank + repair')))
+  .addSubcommand(s => s
+    .setName('anunciar')
+    .setDescription('Avisar en este canal mencionando el rol del preset')
+    .addStringOption(o => o.setName('preset').setDescription('Preset (ej: consumibles)').setRequired(true))
+    .addStringOption(o => o.setName('mensaje').setDescription('Override del texto (opcional). Usá {rol} para mencionar')))
   .addSubcommand(s => s
     .setName('preview')
     .setDescription('Ver el plan sin tocar roles')
@@ -85,13 +92,44 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       await interaction.reply({ content: err, flags: MessageFlags.Ephemeral });
       return;
     }
-    setPreset(interaction.guildId!, { name, roleId: role.id, mode });
+    const existing = getPreset(interaction.guildId!, name);
+    const anuncio = interaction.options.getString('anuncio') ?? existing?.announce;
+    setPreset(interaction.guildId!, { name, roleId: role.id, mode, announce: anuncio ?? undefined });
     await interaction.reply({
       content:
         `✅ Preset **${name}** → ${role} · **${mode === 'replace' ? 'Reemplazar' : 'Solo agregar'}**.\n` +
-        `Cada raid: \`/listarol aplicar preset:${name} lista:...\``,
+        `Anuncio: ${anuncio ?? DEFAULT_ANNOUNCE}\n` +
+        `Cada raid: \`/listarol aplicar\` y después \`/listarol anunciar preset:${name}\``,
       flags: MessageFlags.Ephemeral,
     });
+    return;
+  }
+
+  if (sub === 'anunciar') {
+    const presetName = interaction.options.getString('preset', true);
+    const preset = getPreset(interaction.guildId!, presetName);
+    if (!preset) {
+      await interaction.reply({ content: `❌ No hay preset \`${presetName}\`. Usá \`/listarol setup\` primero.`, flags: MessageFlags.Ephemeral });
+      return;
+    }
+    const role = resolveRole(interaction, preset.roleId);
+    if (!role) {
+      await interaction.reply({ content: `❌ El rol del preset \`${presetName}\` ya no existe.`, flags: MessageFlags.Ephemeral });
+      return;
+    }
+    const channel = interaction.channel;
+    if (!channel || !channel.isTextBased() || channel.isDMBased()) {
+      await interaction.reply({ content: '❌ Este comando necesita un canal de texto.', flags: MessageFlags.Ephemeral });
+      return;
+    }
+    const template = interaction.options.getString('mensaje') ?? preset.announce ?? DEFAULT_ANNOUNCE;
+    const err = await postAnnounce(channel, interaction.guild, role, template);
+    if (err) {
+      await interaction.reply({ content: err, flags: MessageFlags.Ephemeral });
+      return;
+    }
+    const warn = mentionWarning(interaction.guild, role);
+    await interaction.reply({ content: warn ? `✅ Anuncio publicado.\n${warn}` : '✅ Anuncio publicado.', flags: MessageFlags.Ephemeral });
     return;
   }
 

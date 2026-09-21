@@ -8,6 +8,8 @@ export interface RosterRolePreset {
   name: string;
   roleId: string;
   mode: RosterRoleMode;
+  /** `{rol}` se reemplaza por la mención. Si falta, se usa DEFAULT_ANNOUNCE. */
+  announce?: string;
 }
 
 interface RosterRoleFile {
@@ -46,4 +48,8 @@ export function setPreset(discordGuildId: string, preset: RosterRolePreset): voi
 
 export function listPresets(discordGuildId: string): RosterRolePreset[] {
   return Object.values(guildSlice(loadFile(), discordGuildId).presets);
+}
+
+export function findPresetByRole(discordGuildId: string, roleId: string): RosterRolePreset | null {
+  return listPresets(discordGuildId).find(p => p.roleId === roleId) ?? null;
 }
