@@ -2,7 +2,7 @@
 applyTo: "**"
 ---
 
-# WoW Logs Discord Bot
+# Serenity Bot
 
 ## Project Overview
 Discord bot that auto-posts WoW raid logs from wow-logs.co.in into guild Discord channels.
@@ -17,7 +17,8 @@ Module contract: `src/modules/contract.ts`. Do not grow this file — put findin
 - Language: TypeScript 5+ (strict mode, ESM with .js import extensions)
 - Framework: discord.js v14
 - External API: wow-logs.co.in Public API v1 (Bearer auth, REST, JSON)
-- Persistence: JSON file store at data/store.json (no database)
+- Persistence: JSON file store at data/store.json (no database). `rosterRole` is a separate namespace — do not put it on GuildConfig.
+- Privileged intent: Server Members Intent (GuildMembers) for `/listarol`.
 
 ## Architecture
 

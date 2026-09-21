@@ -95,7 +95,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       const uploadPromise = interaction.guild.emojis.create({
         attachment: image,
         name: emojiName,
-        reason: 'WoW Logs Bot — class/spec icons',
+        reason: 'Serenity Bot — class/spec icons',
       });
       const timeout = new Promise<never>((_, reject) => setTimeout(() => reject(new Error('timeout')), 15000));
       await Promise.race([uploadPromise, timeout]);

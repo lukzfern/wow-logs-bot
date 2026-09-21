@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { DEDUP_WINDOW_MS } from './types.js';
 
-const STORE_PATH = join(process.cwd(), 'data', 'store.json');
+export const STORE_PATH = join(process.cwd(), 'data', 'store.json');
 
 export interface GuildConfig {
   realm: string;
@@ -24,6 +24,8 @@ export interface PostedRaid {
 interface StoreData {
   guilds: Record<string, GuildConfig>;
   postedRaids: Record<string, PostedRaid[]>;
+  /** Owned by src/modules/roster-role — do not read/write from log commands. */
+  rosterRole?: Record<string, unknown>;
 }
 
 function load(): StoreData {

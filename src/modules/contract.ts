@@ -1,4 +1,4 @@
-import type { Client, ChatInputCommandInteraction, GatewayIntentBits, PermissionResolvable, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord.js';
+import type { ButtonInteraction, Client, ChatInputCommandInteraction, GatewayIntentBits, PermissionResolvable, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord.js';
 
 /**
  * Target contract for every Discord integration (logs, org, guild admin).
@@ -28,6 +28,8 @@ export interface IntegrationManifest {
   /** One-line purpose for agents and /status. */
   summary: string;
   commands: SlashCommand[];
+  /** Return true if this module handled the button. */
+  handleComponent?: (interaction: ButtonInteraction) => Promise<boolean>;
   watchers?: WatcherJob[];
   /**
    * Extra Gateway intents beyond Guilds.
