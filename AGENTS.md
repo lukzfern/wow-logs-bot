@@ -35,7 +35,7 @@ Deep product/API notes live in `.github/copilot-instructions.md`.
 
 New work goes in `src/modules/<id>/` and implements `IntegrationManifest` from `src/modules/contract.ts`. Register it in `src/modules/index.ts` — `src/index.ts` and `src/commands/index.ts` already compose that array. Do not dump org/admin state into `GuildConfig`.
 
-Shipped modules: `rankings` (`/rankings`), `roster-role` (`/listarol`). The original log watcher/commands still live in `src/watcher.ts` + `src/commands/`.
+Shipped modules: `rankings` (`/rankings`), `goats` (`/goats` — combined weekly top 3 DPS / top 2 heals + same-weekday streaks), `roster-role` (`/listarol`). The original log watcher/commands still live in `src/watcher.ts` + `src/commands/`.
 
 ## Non-negotiables
 

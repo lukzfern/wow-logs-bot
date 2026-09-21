@@ -11,6 +11,7 @@ Guild ops Discord bot for **Serenity @ Wow Patagonia**. Posts [wow-logs.co.in](h
 - **Spanish UI** — all user-facing text in Spanish
 - **Multi-guild** — one bot can serve multiple Discord servers, each with its own guild config
 - **Roster → rol** — `/listarol` asigna un rol a un export de Raid-Helper y anuncia al raid (`anunciar` o el botón post-aplicar)
+- **Goats de la semana** — `/goats` top 3 DPS y top 2 heals combinando las 2 raids, con racha si repetís noche y rol
 
 ## Quick Start
 
@@ -65,6 +66,7 @@ npm start
 | `/preview <log>` | Manage Server | Preview an embed (ephemeral, for testing) |
 | `/status` | Manage Server | Show API health and bot config |
 | `/rankings` | Manage Server | Guild Boss Points rankings (defaults to the realm's active raid/season) |
+| `/goats` | Manage Server | Weekly goats — combined top 3 DPS / top 2 heals across both raid nights |
 | `/listarol` | Manage Roles | Assign a role from a Raid-Helper list and announce it (`setup` / `preview` / `aplicar` / `anunciar`) |
 
 ## Embed Sections
@@ -124,6 +126,7 @@ Uses the [wow-logs.co.in Public API v1](https://wow-logs.co.in/docs/api). Requir
 ```bash
 npm run dev     # Watch mode with tsx
 npm test        # Fetch a log and print embed to console
+npm test goats  # Print the weekly goats embed (optional: npm test goats 2)
 npm run build   # Compile TypeScript
 npm start       # Run the bot
 ```

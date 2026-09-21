@@ -12,10 +12,11 @@ Already shipped (flat `src/`, not yet extracted):
 - Alts: footer only, no extra Discord message
 - Commands: `/setup` `/setupemojis` `/log` `/latestlog` `/logs` `/preview` `/status`
 
+Shipped in modules: `/rankings`, `/goats` (combined weekly top 3 DPS / top 2 heals + same-weekday streaks).
+
 Good next integrations:
 
-- `/rankings` via `GET /guilds/{realm}/{guild}/rankings` (unused today)
-- Weekly recap watcher (aggregate last N logs, one embed)
+- Weekly recap watcher that auto-posts `/goats` (command exists; no cron yet)
 - Meta-driven raid/boss lists (`/meta/raids`, `/meta/raids/{slug}/bosses`) instead of hardcoding thumbnails in `/logs`
 
 Do not re-enable consumables until `bug-reports/001` is fixed upstream.
