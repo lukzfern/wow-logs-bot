@@ -26,6 +26,8 @@ interface StoreData {
   postedRaids: Record<string, PostedRaid[]>;
   /** Owned by src/modules/roster-role — do not read/write from log commands. */
   rosterRole?: Record<string, unknown>;
+  /** Owned by src/modules/goats — weekly goat snapshots for streaks. */
+  goats?: Record<string, unknown>;
 }
 
 function load(): StoreData {
