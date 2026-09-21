@@ -75,3 +75,42 @@ export interface RateInfo {
   monthlyLimit: number;
   monthlyRemaining: number;
 }
+
+export interface WLServer {
+  id: number;
+  slug: string;
+  name: string;
+  serverName: string;
+}
+
+export interface WLSeasonInfo {
+  serverId: number;
+  slug: string;
+  name: string;
+  serverName: string;
+  activeSeason: number;
+  activePhase: number;
+  rankingRaid: { slug: string; name: string };
+  phases: { phase: number; primaryRaid: { slug: string; name: string } }[];
+}
+
+export interface WLRankingPlayer {
+  name: string;
+  class: string;
+  spec: string | null;
+  bossPoints: number;
+  averagePercent: number;
+  bosses: Record<string, number | null>;
+}
+
+export interface WLRankings {
+  guild: WLGuild;
+  bossOrder: string[];
+  filters: {
+    raid: WLRaid;
+    difficulty: { id: string; enum: string; label: string };
+    ladder: string;
+    season: number;
+  };
+  rankings: { players: WLRankingPlayer[] };
+}

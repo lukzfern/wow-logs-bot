@@ -3,9 +3,13 @@ import { config } from './config.js';
 import { friendlyError } from './errors.js';
 import { commandDefinitions, handleCommand } from './commands/index.js';
 import { startWatcher } from './watcher.js';
+import { modules } from './modules/index.js';
+import { startModuleWatchers } from './modules/runtime.js';
+
+const extraIntents = modules.flatMap(m => m.extraIntents ?? []);
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds],
+  intents: [GatewayIntentBits.Guilds, ...extraIntents],
 });
 
 client.once(Events.ClientReady, async (c) => {
@@ -18,6 +22,7 @@ client.once(Events.ClientReady, async (c) => {
   console.log(`Registered ${commandDefinitions.length} slash commands`);
 
   startWatcher(client, config.pollIntervalMs);
+  startModuleWatchers(client, modules);
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {

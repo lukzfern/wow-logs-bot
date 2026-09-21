@@ -33,7 +33,9 @@ Deep product/API notes live in `.github/copilot-instructions.md`.
 | `org` | `attendance`, `absences`, `roster`, `loot`, `calendar` | guild process, officer tools | rewriting log embeds |
 | `discord-admin` | `welcome`, `roles`, `channels`, `moderation` | Discord server structure | wow-logs payloads |
 
-New work goes in `src/modules/<id>/` and implements `IntegrationManifest` from `src/modules/contract.ts`. Do not dump org/admin state into `GuildConfig`.
+New work goes in `src/modules/<id>/` and implements `IntegrationManifest` from `src/modules/contract.ts`. Register it in `src/modules/index.ts` — `src/index.ts` and `src/commands/index.ts` already compose that array. Do not dump org/admin state into `GuildConfig`.
+
+Shipped modules: `rankings` (`/rankings`). The original log watcher/commands still live in `src/watcher.ts` + `src/commands/`.
 
 ## Non-negotiables
 

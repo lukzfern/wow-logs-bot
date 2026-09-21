@@ -1,9 +1,9 @@
-import type { IntegrationManifest } from './contract.js';
+import { assertUniqueCommandNames, type IntegrationManifest } from './contract.js';
+import { module as rankings } from './rankings/index.js';
 
-/**
- * Registry of integrations. `logs` still lives in src/commands + src/watcher
- * until it is extracted. New domains register here.
- */
-export const modules: IntegrationManifest[] = [];
+export const modules: IntegrationManifest[] = [rankings];
 
+assertUniqueCommandNames(modules);
+
+export { assertUniqueCommandNames };
 export type { IntegrationDomain, IntegrationManifest, SlashCommand, WatcherJob } from './contract.js';

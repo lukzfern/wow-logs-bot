@@ -1,8 +1,8 @@
 import { API_BASE, config } from './config.js';
 import { WowLogsApiError } from './errors.js';
-import type { WLGuild, WLLogDetail, WLLogMeta, RateInfo } from './types.js';
+import type { WLGuild, WLLogDetail, WLLogMeta, WLRankings, WLSeasonInfo, WLServer, RateInfo } from './types.js';
 
-export type { WLRaid, WLConsumables, WLPlayer, WLFight, WLLogMeta, WLLogDetail, WLGuild, RateInfo } from './types.js';
+export type { WLRaid, WLConsumables, WLPlayer, WLFight, WLLogMeta, WLLogDetail, WLGuild, WLRankings, WLSeasonInfo, WLServer, RateInfo } from './types.js';
 
 // ── Client ──
 
@@ -63,6 +63,28 @@ class WowLogsApi {
       `${this.guildPath(realm, guild)}/logs/${logId}`,
       { include: 'consumables,interrupts' },
     );
+  }
+
+  metaServers() {
+    return this.request<{ servers: WLServer[] }>('/meta/servers');
+  }
+
+  metaSeason(serverId: number) {
+    return this.request<{ server: WLSeasonInfo }>('/meta/seasons', { serverId: String(serverId) });
+  }
+
+  guildRankings(realm: string, guild: string, params: {
+    raid: string;
+    season: number;
+    difficulty: string;
+    ladder: string;
+  }) {
+    return this.request<WLRankings>(`${this.guildPath(realm, guild)}/rankings`, {
+      raid: params.raid,
+      season: String(params.season),
+      difficulty: params.difficulty,
+      ladder: params.ladder,
+    });
   }
 }
 
