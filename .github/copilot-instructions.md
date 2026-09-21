@@ -9,6 +9,9 @@ Discord bot that auto-posts WoW raid logs from wow-logs.co.in into guild Discord
 Built for WoW private server communities, starting with Wow Patagonia.
 Designed for multi-guild use and open-source contribution.
 
+Agent entry point for new work (logs + future org/admin integrations): `AGENTS.md`.
+Module contract: `src/modules/contract.ts`. Do not grow this file — put findings below.
+
 ## Tech Stack
 - Runtime: Node.js 22+ (native fetch, no polyfills)
 - Language: TypeScript 5+ (strict mode, ESM with .js import extensions)

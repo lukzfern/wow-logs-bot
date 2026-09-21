@@ -1,0 +1,26 @@
+---
+description: Cómo agregar integraciones (logs, organización de raid, admin de Discord)
+globs: src/modules/**/*.ts
+alwaysApply: false
+---
+
+# Integraciones
+
+Toda feature nueva es un módulo con `IntegrationManifest` (`src/modules/contract.ts`).
+
+```
+src/modules/<id>/
+  index.ts          # export const module: IntegrationManifest
+  commands/*.ts     # definition + execute
+  watcher.ts        # opcional
+  store.ts          # solo su namespace
+```
+
+- `domain`: `logs` | `org` | `discord-admin`. No mezclar dueños de datos.
+- Registrar en `src/modules/index.ts`. Nombres de slash commands únicos en todo el bot.
+- Permisos: officers = `ManageGuild` o `ManageEvents`; tools de raider pueden ser más abiertos. `/setup*` sigue siendo admin.
+- Watchers: un job, backoff ante 429, no spam al seed inicial.
+- Intents extra: preguntar antes. `Guilds` alcanza para slash + canales. Members/messages son privilegiados.
+- Extraer el módulo `logs` actual solo si un cambio lo toca de lleno; no refactors colaterales.
+
+Antes de codear, seguir `.cursor/skills/add-discord-integration/SKILL.md`.
