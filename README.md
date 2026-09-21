@@ -60,6 +60,7 @@ npm start
 | `/logs` | Manage Server | List recent logs |
 | `/preview <log>` | Manage Server | Preview an embed (ephemeral, for testing) |
 | `/status` | Manage Server | Show API health and bot config |
+| `/rankings` | Manage Server | Guild Boss Points rankings (defaults to the realm's active raid/season) |
 
 ## Embed Sections
 

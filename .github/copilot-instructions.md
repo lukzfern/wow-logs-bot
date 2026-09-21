@@ -52,6 +52,7 @@ src/
 - Base: https://api.wow-logs.co.in/api/v1
 - Always use the api. subdomain (main domain has Cloudflare bot challenges)
 - Auth: `Authorization: Bearer wl_live_...` on every request except /openapi.json
+- Used endpoints: `/health`, guild logs list/detail, `/meta/servers`, `/meta/seasons`, `/guilds/{realm}/{guild}/rankings`
 - Only public guilds are queryable; private ones return 404
 - `player.role` is only `DPS` or `HEALER` — no separate TANK role in v1
 - `?include=consumables,interrupts` enriches per-fight player data
@@ -157,6 +158,17 @@ curl -s -H "Authorization: Bearer wl_live_YOUR_KEY" \
   the uploader's local timezone. Do NOT convert them — display as-is using `timeZone: 'UTC'`
   in Intl.DateTimeFormat to preserve the raw values. Confirmed: raid starts at 21:00 AR,
   first pull shows 21:14 when displayed without conversion.
+- **Rankings (Patagonia):** As of 2026-09-21, wow-patagonia `activeSeason=5`, `activePhase=2`, `rankingRaid=ulduar`.
+  `raid=toc&season=6` returns 404 ("not available for server 12 in season 6").
+  Default `/rankings` to `/meta/seasons` for that realm — do not hardcode ToC/S6.
+  Players are already ordered by the API (averagePercent). Filter `bossPoints > 0` for the embed.
+  Cap the list at 10: custom spec emojis blow past Discord's 1024-char field limit around row 13.
+  Ulduar coverage (`X/Y HM` on 10/25 HC) is XT, Assembly, Thorim, Freya, Yogg.
+  Always excluded (never on the website table): Flame Leviathan, General Vezax, Hodir
+  (Hodir = "excluded from All-Star points"). wow-patagonia only: Mimiron.
+  A missing slot is "no parse on this ladder", not "never killed". Thorim often
+  vanishes on Hardcore (Aura of Celerity) but appears on Competitive/Regular.
+  Do not use `bossOrder.length` (14) and do not put Hodir back in the denominator.
 - **Encounters display:** Bosses are grouped by bossName. Killed bosses show the kill
   row only (with wipe count if not a one-shot). Undefeated bosses show one row with
   total wipe count and last attempt duration.

@@ -20,11 +20,12 @@ Used today in `src/api.ts`:
 - `GET /health`
 - `GET /guilds/{realm}/{guild}/logs?limit=&cursor=`
 - `GET /guilds/{realm}/{guild}/logs/{id|latest}?include=consumables,interrupts`
+- `GET /meta/servers` and `GET /meta/seasons?serverId=` (defaults for `/rankings`)
+- `GET /guilds/{realm}/{guild}/rankings?raid=&season=&difficulty=&ladder=`
 
 Unused but documented (`/docs/api`, `/openapi.json`):
 
-- `/meta/servers` `/meta/raids` `/meta/raids/{slug}/bosses` `/meta/ladders` `/meta/difficulties` `/meta/seasons`
-- `/guilds/{realm}/{guild}/rankings?raid=&season=&difficulty=&ladder=`
+- `/meta/raids` `/meta/raids/{slug}/bosses` `/meta/ladders` `/meta/difficulties`
 
 ## Known lies in the payload
 
