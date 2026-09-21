@@ -1,0 +1,26 @@
+---
+description: Patrón de slash commands de discord.js en este bot
+globs: src/commands/**/*.ts
+alwaysApply: false
+---
+
+# Slash commands
+
+```typescript
+export const definition = new SlashCommandBuilder()
+  .setName('nombre')
+  .setDescription('Texto en español')
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+  .setContexts(InteractionContextType.Guild);
+
+export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  await interaction.deferReply({ flags: MessageFlags.Ephemeral }); // si tarda
+  // ...
+}
+```
+
+- Un archivo por comando. Registrar en `src/commands/index.ts` (hasta extraer a `src/modules`).
+- Requiere `/setup` si lee `getGuildConfig` — responder efímero si falta.
+- Defer antes de I/O (API, Discord emoji upload).
+- No meter extractores de stats acá: van a `src/format/stats.ts`.
+- Comandos de test (`/preview`) no deben mutar `lastLogId` ni `postedRaids`.

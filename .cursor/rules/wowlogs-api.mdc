@@ -1,0 +1,19 @@
+---
+description: Quirks y superficie real de la Public API v1 de wow-logs.co.in
+globs: src/api.ts,src/types.ts,src/watcher.ts,src/format/**/*.ts
+alwaysApply: false
+---
+
+# wow-logs API
+
+- Base: `https://api.wow-logs.co.in/api/v1` (nunca el dominio www — Cloudflare challenge).
+- Auth: `Authorization: Bearer wl_live_...` en todo excepto `/openapi.json`.
+- El bot hoy usa solo `/health`, `.../logs`, `.../logs/{id|latest}?include=consumables,interrupts`.
+- Disponibles y sin usar: `/meta/*`, `.../rankings` (Boss Points V2).
+- Guild pública o 404. Nombre en el path case-sensitive (`Serenity`).
+- `player.role` es `DPS` | `HEALER` — no hay TANK.
+- Timestamps de fight: sufijo `Z` pero hora local del uploader. No convertir.
+- Consumables: el include existe, los valores vienen en cero (ver `bug-reports/001`). `extractConsumables` está desactivado a propósito.
+- Muertes: entero, sin causa. Excluir Hunters (Feign Death).
+- Logs mergeados: el listado sigue mostrando IDs viejos (`bug-reports/002`). Dedup por raid+size+ventana 30 min.
+- Listas: costo RPM = `limit`. Free max 5; Pro 25. Ante duda, pegale a la API con `test-cli` / curl, no adivines.

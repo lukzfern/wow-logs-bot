@@ -1,0 +1,16 @@
+---
+description: Convenciones del bot Discord (TypeScript, i18n, store, verificación)
+alwaysApply: true
+---
+
+# Core
+
+- ESM + extensiones `.js` en imports. Builtins con prefijo `node:`.
+- TypeScript strict: no `any`; `unknown` + narrowing.
+- Texto al usuario en español (es-AR). Logs de consola en inglés con prefijo `[modulo]`.
+- Errores al usuario solo via `friendlyError()` en `src/errors.ts`.
+- Persistencia: `data/store.json`. Un módulo no escribe las keys de otro. `GuildConfig` es solo mapping Discord→wow-logs + canal de logs.
+- Números con `fmtK` / `Intl.NumberFormat('es-AR')`. Fechas de logs: `timeZone: 'UTC'` (los ISO traen `Z` pero no son UTC).
+- Embeds: value ≤ 1024, total ≤ 6000. Usar `truncate()`.
+- Verificar con `npx tsc --noEmit` y `npm run build`. Embeds: `npm test` y `/preview`.
+- No agregar intents privilegiados ni secretos a git (`.env`, `data/`).

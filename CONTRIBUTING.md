@@ -22,7 +22,8 @@
 - **Reusable stats** go in `src/format/stats.ts`, not in the embed builder
 - **User-facing text** in Spanish, console logs in English with `[module]` prefix
 - **Numbers** formatted with `fmtK()` (e.g. 8.2K)
-- Read `.github/copilot-instructions.md` for full architecture context
+- Read `AGENTS.md` first, then `.github/copilot-instructions.md` for API/product findings
+- New features that are not log-posting belong in `src/modules/<id>/` (see `.cursor/skills/add-discord-integration/`)
 
 ## Before submitting a PR
 
